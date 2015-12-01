@@ -130,13 +130,13 @@ uploadArchives {
             pom.project {
                  name projectTitle
                  packaging 'jar'
-                 description 'Service for generating DB access logic in simple way via interfaces and annotations'
-                 url 'https://github.com/xBlackCat/sjpu-dbah'
+                 description 'Helper for build generator to implement class logic in runtime basing on interface/methods/annotations'
+                 url 'https://github.com/xBlackCat/sjpu-rcb'
 
                  scm {
-                     url 'scm:git@github.com:xBlackCat/sjpu-dbah.git'
-                     connection 'scm:git@github.com:xBlackCat/sjpu-dbah.git'
-                     developerConnection 'scm:git@github.com:xBlackCat/sjpu-dbah.git'
+                     url 'scm:git@github.com:xBlackCat/sjpu-rcb.git'
+                     connection 'scm:git@github.com:xBlackCat/sjpu-rcb.git'
+                     developerConnection 'scm:git@github.com:xBlackCat/sjpu-rcb.git'
                  }
 
                  licenses {
