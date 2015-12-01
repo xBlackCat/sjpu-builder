@@ -104,7 +104,7 @@ public class ClassBuilder<Base> implements IBuilder<Base> {
             }
 
             if (!root.equals(target)) {
-                if (checkIsDeclared(root, target, m)) {
+                if (BuilderUtils.findDeclaredMethod(root, target, m) != null) {
                     continue;
                 }
             }
@@ -115,22 +115,6 @@ public class ClassBuilder<Base> implements IBuilder<Base> {
         }
 
         implementNonPublicMethods(root, target.getSuperclass(), accessHelper, implementedMethods);
-    }
-
-    private static boolean checkIsDeclared(Class<?> root, Class<?> tillSuperClass, Method m) {
-        try {
-            // Check non-public abstract method for implementation in the root class
-            root.getDeclaredMethod(m.getName(), m.getParameterTypes());
-            return true;
-        } catch (NoSuchMethodException e) {
-            // Method is not found - build it!
-        }
-        final Class<?> superclass = root.getSuperclass();
-        if (superclass == null || superclass.equals(tillSuperClass)) {
-            return false;
-        }
-
-        return checkIsDeclared(superclass, tillSuperClass, m);
     }
 
     private <T extends Base> CtClass defineCtClassByInterface(Class<T> target) throws NotFoundException, CannotCompileException {

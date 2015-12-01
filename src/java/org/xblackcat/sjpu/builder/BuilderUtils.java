@@ -219,4 +219,43 @@ public class BuilderUtils {
             }
         }
     }
+
+    /**
+     * Search method in specified class by signature of method.
+     *
+     * @param root class to search method in
+     * @param m    method as signature source.
+     * @return method of the specified class with the same signature or null if the class has no method with the signature
+     */
+    public static Method findDeclaredMethod(Class<?> root, Method m) {
+        return BuilderUtils.findDeclaredMethod(root, root, m);
+    }
+
+    /**
+     * Search method in specified class by signature of method. Search through superclasses till specified super class (exclude).
+     *
+     * @param root           class to search method in and its superclasses
+     * @param tillSuperClass super class of root as bound for search. <code>null</code> value allows search through all
+     *                       superclass hierarchy of root class. To search
+     * @param m              method as signature source.
+     * @return method of the specified class with the same signature or null if the class has no method with the signature
+     */
+    public static Method findDeclaredMethod(Class<?> root, Class<?> tillSuperClass, Method m) {
+        try {
+            // Check non-public abstract method for implementation in the root class
+            return root.getDeclaredMethod(m.getName(), m.getParameterTypes());
+        } catch (NoSuchMethodException e) {
+            // Method is not found - check superclass
+        }
+        if (root.equals(tillSuperClass)) {
+            return null;
+        }
+
+        final Class<?> superclass = root.getSuperclass();
+        if (superclass == null || superclass.equals(tillSuperClass)) {
+            return null;
+        }
+
+        return findDeclaredMethod(superclass, tillSuperClass, m);
+    }
 }
