@@ -1,0 +1,5 @@
+dist/
+report/
+out/
+.gradle/
+build/
