@@ -4,16 +4,16 @@ import javassist.ClassClassPath;
 import javassist.ClassPool;
 import javassist.CtClass;
 import javassist.NotFoundException;
+import org.apache.commons.lang3.ArrayUtils;
+import org.apache.commons.lang3.StringEscapeUtils;
 import org.apache.commons.lang3.StringUtils;
 
 import java.lang.reflect.Method;
 import java.lang.reflect.ParameterizedType;
 import java.lang.reflect.Type;
 import java.lang.reflect.TypeVariable;
-import java.util.HashMap;
-import java.util.HashSet;
-import java.util.Map;
-import java.util.Set;
+import java.util.*;
+import java.util.function.Function;
 
 /**
  * 30.06.2014 12:45
@@ -257,5 +257,101 @@ public class BuilderUtils {
         }
 
         return findDeclaredMethod(superclass, tillSuperClass, m);
+    }
+
+    public static <T extends Enum<T>> T searchForEnum(Class<T> clazz, String name) throws IllegalArgumentException {
+        try {
+            return Enum.valueOf(clazz, name);
+        } catch (IllegalArgumentException e) {
+            // Try to search case-insensitive
+            for (T c : clazz.getEnumConstants()) {
+                if (name.equalsIgnoreCase(c.name())) {
+                    return c;
+                }
+            }
+
+            throw e;
+        }
+    }
+
+    /**
+     * Generate a field name by getter method name: trims 'is' or 'get' at the beginning and convert to lower case the first letter.
+     *
+     * @param mName getter method name
+     * @return field name related to the getter.
+     */
+    public static String makeFieldName(String mName) {
+        if (mName.startsWith("get") && mName.length() > 3) {
+            final char[] fn = mName.toCharArray();
+            fn[3] = Character.toLowerCase(fn[3]);
+            return new String(fn, 3, fn.length - 3);
+        }
+
+        if (mName.startsWith("is") && mName.length() > 2) {
+            final char[] fn = mName.toCharArray();
+            fn[2] = Character.toLowerCase(fn[2]);
+            return new String(fn, 2, fn.length - 2);
+        }
+
+        return mName;
+    }
+
+    public static Class<?> detectTypeArgClass(Type type) {
+        return detectTypeArgsClass(type, 1)[0];
+    }
+
+    public static Class<?>[] detectTypeArgsClass(Type type, int amount) {
+        Class<?>[] result = new Class[amount];
+        if ((type instanceof ParameterizedType)) {
+            final Type[] typeArguments = ((ParameterizedType) type).getActualTypeArguments();
+            if (typeArguments.length == amount) {
+                while (amount-- > 0) {
+                    final Type argument = typeArguments[amount];
+                    if (argument instanceof Class) {
+                        result[amount] = (Class<?>) argument;
+                    }
+                }
+            }
+        }
+        return result;
+    }
+
+    public static String toJavaLiteral(String str) {
+        if (str == null) {
+            return "null";
+        }
+        return '"' + StringEscapeUtils.escapeJava(str) + '"';
+    }
+
+    @SafeVarargs
+    public static <T> String toArrayJavaCode(Function<T, String> argToJava, Class<T> elementClass, T... args) {
+        return toArrayJavaCode(argToJava, elementClass, ArrayUtils.isEmpty(args) ? Collections.emptyList() : Arrays.asList(args));
+    }
+
+    public static <T> String toArrayJavaCode(Function<T, String> argToJava, Class<T> elementClass, Collection<T> list) {
+        StringBuilder javaCode = new StringBuilder("new ");
+        javaCode.append(BuilderUtils.getName(elementClass));
+        if (list == null || list.isEmpty()) {
+            javaCode.append("[0]");
+        } else {
+            javaCode.append("[]{");
+            boolean first = true;
+            for (T el : list) {
+                if (first) {
+                    first = false;
+                } else {
+                    javaCode.append(", ");
+                }
+
+                if (el != null) {
+                    javaCode.append(argToJava.apply(el));
+                } else {
+                    javaCode.append("null");
+                }
+            }
+            javaCode.append("}");
+        }
+
+        return javaCode.toString();
     }
 }
