@@ -8,10 +8,7 @@ import org.apache.commons.lang3.ArrayUtils;
 import org.apache.commons.lang3.StringEscapeUtils;
 import org.apache.commons.lang3.StringUtils;
 
-import java.lang.reflect.Method;
-import java.lang.reflect.ParameterizedType;
-import java.lang.reflect.Type;
-import java.lang.reflect.TypeVariable;
+import java.lang.reflect.*;
 import java.util.*;
 import java.util.function.Function;
 
@@ -294,6 +291,44 @@ public class BuilderUtils {
         }
 
         return mName;
+    }
+
+    public static Method findGetter(Class<?> aClass, String fieldName) {
+        try {
+            final Method m = aClass.getMethod(fieldName);
+            if (isGetter(m)) {
+                return m;
+            }
+        } catch (ReflectiveOperationException e) {
+            // Ignore
+        }
+
+        try {
+            final Method m = aClass.getMethod("get" + StringUtils.capitalize(fieldName));
+            if (isGetter(m)) {
+                return m;
+            }
+        } catch (ReflectiveOperationException e) {
+            // Ignore
+        }
+
+        try {
+            final Method m = aClass.getMethod("is" + StringUtils.capitalize(fieldName));
+            if (isGetter(m)) {
+                return m;
+            }
+        } catch (ReflectiveOperationException e) {
+            // Ignore
+        }
+
+        return null;
+    }
+
+    public static boolean isGetter(Method m) {
+        return Modifier.isPublic(m.getModifiers()) &&
+                !m.getReturnType().equals(Void.class) &&
+                !m.getReturnType().equals(void.class) &&
+                m.getParameterCount() == 0;
     }
 
     public static Class<?> detectTypeArgClass(Type type) {
