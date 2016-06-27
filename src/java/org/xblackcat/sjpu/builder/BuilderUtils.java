@@ -11,6 +11,8 @@ import org.apache.commons.lang3.StringUtils;
 import java.lang.reflect.*;
 import java.util.*;
 import java.util.function.Function;
+import java.util.stream.Collectors;
+import java.util.stream.Stream;
 
 /**
  * 30.06.2014 12:45
@@ -28,6 +30,31 @@ public class BuilderUtils {
      */
     public static String getName(Class<?> clazz) {
         return StringUtils.replaceChars(checkArray(clazz), '$', '.');
+    }
+
+    public static String getName(Type type) {
+        if (type instanceof Class) {
+            return getName((Class<?>) type);
+        } else if (type instanceof ParameterizedType) {
+            StringBuilder name = new StringBuilder();
+            final ParameterizedType pt = (ParameterizedType) type;
+            name.append(getName(pt.getRawType()));
+            if (pt.getActualTypeArguments().length > 0) {
+                final String params = Stream.of(pt.getActualTypeArguments())
+                        .map(BuilderUtils::getName)
+                        .collect(Collectors.joining(",", "<", ">"));
+                name.append(params);
+            }
+            return name.toString();
+        } else if (type instanceof GenericArrayType) {
+            final GenericArrayType at = (GenericArrayType) type;
+            StringBuilder name = new StringBuilder();
+            name.append(getName(at.getGenericComponentType()));
+            name.append("[]");
+            return name.toString();
+        } else {
+            return type.toString();
+        }
     }
 
     protected static String checkArray(Class<?> clazz) {
