@@ -5,8 +5,8 @@ import javassist.ClassPool;
 import javassist.CtClass;
 import javassist.NotFoundException;
 import org.apache.commons.lang3.ArrayUtils;
-import org.apache.commons.lang3.StringEscapeUtils;
 import org.apache.commons.lang3.StringUtils;
+import org.apache.commons.text.StringEscapeUtils;
 
 import java.lang.reflect.*;
 import java.util.*;
@@ -48,10 +48,7 @@ public class BuilderUtils {
             return name.toString();
         } else if (type instanceof GenericArrayType) {
             final GenericArrayType at = (GenericArrayType) type;
-            StringBuilder name = new StringBuilder();
-            name.append(getName(at.getGenericComponentType()));
-            name.append("[]");
-            return name.toString();
+            return getName(at.getGenericComponentType()) + "[]";
         } else {
             return type.toString();
         }
@@ -305,13 +302,13 @@ public class BuilderUtils {
      * @return field name related to the getter.
      */
     public static String makeFieldName(String mName) {
-        if (mName.startsWith("get") && mName.length() > 3) {
+        if (mName.startsWith("get") && mName.length() > 3 && Character.isUpperCase(mName.charAt(3))) {
             final char[] fn = mName.toCharArray();
             fn[3] = Character.toLowerCase(fn[3]);
             return new String(fn, 3, fn.length - 3);
         }
 
-        if (mName.startsWith("is") && mName.length() > 2) {
+        if (mName.startsWith("is") && mName.length() > 2 && Character.isUpperCase(mName.charAt(2))) {
             final char[] fn = mName.toCharArray();
             fn[2] = Character.toLowerCase(fn[2]);
             return new String(fn, 2, fn.length - 2);
@@ -330,8 +327,9 @@ public class BuilderUtils {
             // Ignore
         }
 
+        final String capitalized = StringUtils.capitalize(fieldName);
         try {
-            final Method m = aClass.getMethod("get" + StringUtils.capitalize(fieldName));
+            final Method m = aClass.getMethod("get" + capitalized);
             if (isGetter(m)) {
                 return m;
             }
@@ -340,7 +338,7 @@ public class BuilderUtils {
         }
 
         try {
-            final Method m = aClass.getMethod("is" + StringUtils.capitalize(fieldName));
+            final Method m = aClass.getMethod("is" + capitalized);
             if (isGetter(m)) {
                 return m;
             }
