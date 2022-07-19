@@ -121,7 +121,7 @@ public class BuilderUtils {
     }
 
     public static String asIdentifier(Class<?> typeMap) {
-        return StringUtils.replaceChars(getName(typeMap), '.', '_');
+        return StringUtils.replaceChars(getName(typeMap), ".[]", "___");
     }
 
     public static String asIdentifier(Method mm) {
