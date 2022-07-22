@@ -41,7 +41,8 @@ dependencies {
 
     testImplementation group: 'org.apache.logging.log4j', name: 'log4j-core', version: '[2.18.0,3.0)'
     testImplementation group: 'org.apache.logging.log4j', name: 'log4j-jcl', version: '[2.18.0,3.0)'
-    testImplementation group: 'junit', name: 'junit', version: '[4.12,)'
+    testImplementation(platform("org.junit:junit-bom:5.8.2"))
+    testImplementation('org.junit.jupiter:junit-jupiter')
 }
 
 task sourcesJar(type: Jar) {
@@ -72,6 +73,9 @@ task javadocJar(dependsOn: javadoc, type: Jar) {
 //  options.compilerArgs.add '-Xlint:-rawtypes'
 //}
 
+test {
+    useJUnitPlatform()
+}
 
 task sourcesZip(type: Zip) {
     from project.projectDir

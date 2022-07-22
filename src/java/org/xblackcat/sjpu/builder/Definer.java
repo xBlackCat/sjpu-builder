@@ -4,11 +4,6 @@ import javassist.*;
 
 import java.lang.reflect.Method;
 
-/**
- * 15.11.13 15:37
- *
- * @author xBlackCat
- */
 public class Definer<Base> implements IDefiner {
     private final Class<? extends Base> baseClass;
     private final Class<?>[] paramClasses;

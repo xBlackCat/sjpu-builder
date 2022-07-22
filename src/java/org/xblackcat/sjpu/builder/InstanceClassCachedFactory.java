@@ -3,11 +3,6 @@ package org.xblackcat.sjpu.builder;
 import java.util.concurrent.locks.ReadWriteLock;
 import java.util.concurrent.locks.ReentrantReadWriteLock;
 
-/**
- * 04.04.2014 15:47
- *
- * @author xBlackCat
- */
 public class InstanceClassCachedFactory<Base> extends ACachedFactory<Base, Class<? extends Base>> {
     protected final ReadWriteLock lock = new ReentrantReadWriteLock();
 

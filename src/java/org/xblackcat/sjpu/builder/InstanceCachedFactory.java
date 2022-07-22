@@ -1,10 +1,5 @@
 package org.xblackcat.sjpu.builder;
 
-/**
- * 04.04.2014 15:47
- *
- * @author xBlackCat
- */
 public class InstanceCachedFactory<Base> extends ACachedFactory<Base, Base> {
     public InstanceCachedFactory(IBuilder<Base> builder, Class<?>... argClasses) {
         super(builder, argClasses);

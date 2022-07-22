@@ -3,11 +3,6 @@ package org.xblackcat.sjpu.builder;
 import java.lang.reflect.Method;
 import java.lang.reflect.Modifier;
 
-/**
- * 01.12.2015 11:36
- *
- * @author xBlackCat
- */
 public abstract class AProxyMethodBuilder implements IMethodBuilder {
     private final Class<?> delegateClass;
 

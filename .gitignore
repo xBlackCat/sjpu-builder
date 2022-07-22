@@ -3,3 +3,4 @@ report/
 out/
 .gradle/
 build/
+.idea/

@@ -14,11 +14,6 @@ import java.util.function.Function;
 import java.util.stream.Collectors;
 import java.util.stream.Stream;
 
-/**
- * 30.06.2014 12:45
- *
- * @author xBlackCat
- */
 public class BuilderUtils {
     public static final CtClass[] EMPTY_LIST = new CtClass[]{};
 
@@ -215,6 +210,7 @@ public class BuilderUtils {
         return map;
     }
 
+    @SuppressWarnings("rawtypes")
     private static void collectTypeVariables(Map<TypeVariable<?>, Type> result, Type type) {
         if (type == null) {
             return;

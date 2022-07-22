@@ -6,11 +6,6 @@ import org.apache.commons.logging.LogFactory;
 import java.lang.annotation.Annotation;
 import java.lang.reflect.Method;
 
-/**
- * 01.12.2015 9:26
- *
- * @author xBlackCat
- */
 public abstract class AnAnnotatedMethodBuilder<A extends Annotation> implements IMethodBuilder {
     protected final Log log = LogFactory.getLog(getClass());
     protected final Class<A> annClass;

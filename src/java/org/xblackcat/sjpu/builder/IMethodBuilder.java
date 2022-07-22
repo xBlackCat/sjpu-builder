@@ -6,11 +6,6 @@ import javassist.NotFoundException;
 
 import java.lang.reflect.Method;
 
-/**
- * 11.03.13 13:16
- *
- * @author xBlackCat
- */
 public interface IMethodBuilder {
     void buildMethod(
             CtClass accessHelper,

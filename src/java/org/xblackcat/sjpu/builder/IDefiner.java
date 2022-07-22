@@ -4,11 +4,6 @@ import javassist.*;
 
 import java.lang.reflect.Method;
 
-/**
- * 24.04.2015 12:34
- *
- * @author xBlackCat
- */
 public interface IDefiner {
     CtClass getBaseCtClass() throws NotFoundException;
 

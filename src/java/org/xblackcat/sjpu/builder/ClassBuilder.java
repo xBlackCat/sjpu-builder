@@ -8,11 +8,6 @@ import java.lang.reflect.Method;
 import java.util.*;
 import java.util.stream.Collectors;
 
-/**
- * 04.04.2014 16:10
- *
- * @author xBlackCat
- */
 public class ClassBuilder<Base> implements IBuilder<Base> {
     private final List<IMethodBuilder> methodBuilders;
     private final IDefiner definer;

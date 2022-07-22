@@ -1,10 +1,5 @@
 package org.xblackcat.sjpu.builder;
 
-/**
- * 16.10.13 9:49
- *
- * @author xBlackCat
- */
 public class GeneratorException extends RuntimeException {
     public GeneratorException() {
         super();

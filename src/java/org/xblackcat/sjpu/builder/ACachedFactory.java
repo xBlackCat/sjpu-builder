@@ -10,11 +10,6 @@ import java.util.Objects;
 import java.util.concurrent.locks.ReadWriteLock;
 import java.util.concurrent.locks.ReentrantReadWriteLock;
 
-/**
- * 14.10.2015 14:48
- *
- * @author xBlackCat
- */
 public abstract class ACachedFactory<Base, CacheObj> implements IFactory<Base> {
     protected final ReadWriteLock lock = new ReentrantReadWriteLock();
     protected final Class<?>[] argClasses;

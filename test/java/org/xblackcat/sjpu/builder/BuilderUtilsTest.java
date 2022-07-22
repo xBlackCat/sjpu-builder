@@ -1,7 +1,7 @@
 package org.xblackcat.sjpu.builder;
 
-import org.junit.Assert;
-import org.junit.Test;
+import org.junit.jupiter.api.Assertions;
+import org.junit.jupiter.api.Test;
 
 import java.lang.reflect.Method;
 import java.lang.reflect.Type;
@@ -12,17 +12,12 @@ import java.util.Map;
 import java.util.SortedMap;
 import java.util.concurrent.Callable;
 
-/**
- * 20.10.2015 20:14
- *
- * @author xBlackCat
- */
 public class BuilderUtilsTest {
     @Test
     public void simpleResolving() {
         final Map<TypeVariable<?>, Class<?>> typeVariables = BuilderUtils.resolveTypeVariables(SimpleTestClass1.class);
 
-        Assert.assertEquals(
+        Assertions.assertEquals(
                 Collections.singletonMap(
                         Callable.class.getTypeParameters()[0],
                         Integer.class
@@ -42,7 +37,7 @@ public class BuilderUtilsTest {
             expected.put(TestClass1.class.getTypeParameters()[1], Double.class);
             expected.put(TestSubClass1.class.getTypeParameters()[0], String.class);
 
-            Assert.assertEquals(expected, typeVariables);
+            Assertions.assertEquals(expected, typeVariables);
         }
 
         {
@@ -51,7 +46,7 @@ public class BuilderUtilsTest {
             final Map<TypeVariable<?>, Class<?>> expected = new HashMap<>();
             expected.put(TestClass1.class.getTypeParameters()[1], Double.class);
 
-            Assert.assertEquals(expected, typeVariables);
+            Assertions.assertEquals(expected, typeVariables);
         }
 
         {
@@ -64,7 +59,7 @@ public class BuilderUtilsTest {
             expected.put(TestClass1.class.getTypeParameters()[0], Long.class);
             expected.put(TestClass1.class.getTypeParameters()[1], Character.class);
 
-            Assert.assertEquals(expected, typeVariables);
+            Assertions.assertEquals(expected, typeVariables);
         }
         {
             final Method methodModel = getClass().getMethod("methodModel2", TestClass1.class);
@@ -77,7 +72,7 @@ public class BuilderUtilsTest {
                 expected.put(TestClass1.class.getTypeParameters()[0], Class.class);
                 expected.put(TestClass1.class.getTypeParameters()[1], Callable.class);
 
-                Assert.assertEquals(expected, typeVariables);
+                Assertions.assertEquals(expected, typeVariables);
             }
 
             {
@@ -91,7 +86,7 @@ public class BuilderUtilsTest {
                 expected.put(TestSub2Class1.class.getTypeParameters()[0], Thread.class);
                 expected.put(TestSub2Class1.class.getTypeParameters()[1], SortedMap.class);
 
-                Assert.assertEquals(expected, typeVariables);
+                Assertions.assertEquals(expected, typeVariables);
             }
 
         }
