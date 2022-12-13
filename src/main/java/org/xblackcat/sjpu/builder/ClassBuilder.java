@@ -68,7 +68,7 @@ public class ClassBuilder<Base> implements IBuilder<Base> {
             implementNonPublicMethods(target, target, accessHelper, implementedMethods);
 
             @SuppressWarnings("unchecked")
-            final Class<T> ahClass = (Class<T>) accessHelper.toClass();
+            final Class<T> ahClass = (Class<T>) accessHelper.toClass(target);
             return ahClass;
         } catch (NotFoundException | CannotCompileException e) {
             throw new GeneratorException("Exception occurs while build AccessHelper", e);
